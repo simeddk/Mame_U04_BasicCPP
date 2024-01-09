@@ -1,4 +1,6 @@
 #include "CProperty.h"
+#include "../01_Print/CHelloWorld.h"
+
 
 ACProperty::ACProperty()
 {
@@ -9,6 +11,9 @@ ACProperty::ACProperty()
 void ACProperty::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!!Object)
+		Object->Print();
 	
 }
 

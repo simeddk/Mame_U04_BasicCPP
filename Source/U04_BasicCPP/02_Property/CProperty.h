@@ -42,4 +42,9 @@ private:
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 		FString message = "HAHA";
+
+private:
+	UPROPERTY(EditInstanceOnly)
+		class ACHelloWorld* Object;
+
 };

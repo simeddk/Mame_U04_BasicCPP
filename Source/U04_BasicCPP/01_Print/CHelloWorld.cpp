@@ -26,3 +26,8 @@ void ACHelloWorld::Tick(float DeltaTime)
 
 }
 
+void ACHelloWorld::Print()
+{
+	UE_LOG(LogTemp, Warning, L"Print is Called");
+}
+
