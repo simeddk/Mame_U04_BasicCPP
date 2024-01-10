@@ -16,8 +16,18 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	//All Class Ref Showing
 	UPROPERTY(EditDefaultsOnly)
 		UClass* ClassRef;
 
+	//Specific Sub Class Showing
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<class ACStaticMesh> SubClassOf;
 
+	//Array
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<class ACStaticMesh> SpawnClasses[4];
+
+private:
+	class ACStaticMesh* Spawned[4];
 };
