@@ -24,4 +24,10 @@ private:
 	void OnMoveForward(float InAxis);
 	void OnMoveRight(float InAxis);
 
+private:
+	UPROPERTY(VisibleDefaultsOnly)
+		class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCameraComponent* Camera;
 };

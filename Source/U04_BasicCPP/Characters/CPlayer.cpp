@@ -1,9 +1,20 @@
 #include "CPlayer.h"
 #include "Global.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 ACPlayer::ACPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	//MeshComp
+	USkeletalMesh* meshAsset;
+	CHelpers::GetAsset<USkeletalMesh>(&meshAsset, "SkeletalMesh'/Game/Character/Mesh/SK_Mannequin.SK_Mannequin'");
+	GetMesh()->SetSkeletalMesh(meshAsset);
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
+	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
+
+	//UnresolvedMergeConflict. Create SpringArmComp, Camera
 
 }
 
@@ -29,11 +40,17 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ACPlayer::OnMoveForward(float InAxis)
 {
-	CLog::Print(InAxis, 1, 5.f, FColor::Red);
+	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
+	FVector direction = FQuat(rotator).GetForwardVector().GetSafeNormal2D();
+
+	AddMovementInput(direction, InAxis);
 }
 
 void ACPlayer::OnMoveRight(float InAxis)
 {
-	CLog::Print(InAxis, 2, 5.f, FColor::Green);
+	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
+	FVector direction = FQuat(rotator).GetRightVector().GetSafeNormal2D();
+
+	AddMovementInput(direction, InAxis);
 }
 
