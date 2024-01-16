@@ -1,5 +1,20 @@
 #pragma once
 
+//-----------------------------------------------------------------------------
+//Macros
+//-----------------------------------------------------------------------------
+#define CheckNull(p) { if(p == nullptr) return; }
+#define CheckNullResult(p, result) { if(p == nullptr) return result; }
+
+#define CheckTrue(p) { if(p == true) return; }
+#define CheckTrueResult(p, result) { if(p == true) return result; }
+
+#define CheckFalse(p) { if(p == false) return; }
+#define CheckFalseResult(p, result) { if(p == false) return result; }
+
+//-----------------------------------------------------------------------------
+//CHelpers
+//-----------------------------------------------------------------------------
 class U04_BASICCPP_API CHelpers
 {
 public:
@@ -19,5 +34,20 @@ public:
 		verifyf(asset.Succeeded(), TEXT("Asset Not Found"));
 
 		*OutObject = asset.Object;
+	}
+
+	template<typename T>
+	static void CreateSceneComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr)
+	{
+		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
+		
+		if (!!InParent)
+		{
+			(*OutComponent)->SetupAttachment(InParent);
+			return;
+		}
+		
+		InActor->SetRootComponent(*OutComponent);
+		
 	}
 };

@@ -24,6 +24,14 @@ private:
 	void OnMoveForward(float InAxis);
 	void OnMoveRight(float InAxis);
 
+	void OnHorizontalLook(float InAxis);
+	void OnVerticalLook(float InAxis);
+
+	//Action Event
+private:
+	void OnRun();
+	void OffRun();
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
