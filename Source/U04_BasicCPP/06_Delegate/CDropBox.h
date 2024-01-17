@@ -1,0 +1,30 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "CDropBox.generated.h"
+
+UCLASS()
+class U04_BASICCPP_API ACDropBox : public AActor
+{
+	GENERATED_BODY()
+	
+public:	
+	ACDropBox();
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY(VisibleDefaultsOnly)
+		class USceneComponent* Root;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStaticMeshComponent* Boxes[3];
+
+private:
+	class UMaterialInstanceDynamic* DynamicMaterials[3];
+	FVector OriginLocation[3];
+
+	//UnresolvedMergeConflict. 
+};
