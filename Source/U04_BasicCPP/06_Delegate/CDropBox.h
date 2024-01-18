@@ -16,6 +16,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UFUNCTION()
+		void RandomDrop(int32 InIndex, FLinearColor InColor);
+
+private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USceneComponent* Root;
 
@@ -26,5 +30,5 @@ private:
 	class UMaterialInstanceDynamic* DynamicMaterials[3];
 	FVector OriginLocation[3];
 
-	//UnresolvedMergeConflict. 
+	int32 Index;
 };

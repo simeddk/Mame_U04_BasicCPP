@@ -32,6 +32,10 @@ private:
 	void OnRun();
 	void OffRun();
 
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetBodyColor(FLinearColor InColor);
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;

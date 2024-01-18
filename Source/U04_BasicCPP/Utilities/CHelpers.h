@@ -37,6 +37,15 @@ public:
 	}
 
 	template<typename T>
+	static void GetAssetDynamic(T** OutObject, FString InPath)
+	{
+		T* object = Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *InPath));
+		verifyf(!!object, TEXT("Asset Not Found - Dynamic"));
+
+		*OutObject = object;
+	}
+
+	template<typename T>
 	static void CreateSceneComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr)
 	{
 		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);

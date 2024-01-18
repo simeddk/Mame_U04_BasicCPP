@@ -100,3 +100,8 @@ void ACPlayer::OffRun()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 }
+
+void ACPlayer::SetBodyColor(FLinearColor InColor)
+{
+
+}
