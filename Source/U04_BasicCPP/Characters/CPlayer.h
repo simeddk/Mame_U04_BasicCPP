@@ -42,4 +42,8 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
+
+private:
+	class UMaterialInstanceDynamic* BodyMaterial;
+	class UMaterialInstanceDynamic* LogoMaterial;
 };

@@ -15,6 +15,9 @@ protected:
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
 		void ChangePlayerColor();
+
+	UFUNCTION(BlueprintNativeEvent)
+		void ResetPlayerColor();
 	
 private:
 	UFUNCTION()

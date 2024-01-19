@@ -4,6 +4,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "CAnimInstance.h"
 
 ACPlayer::ACPlayer()
@@ -41,8 +43,17 @@ ACPlayer::ACPlayer()
 
 void ACPlayer::BeginPlay()
 {
+	UMaterial* bodyMaterialAsset;
+	CHelpers::GetAssetDynamic<UMaterial>(&bodyMaterialAsset, "Material'/Game/Character/Materials/M_UE4Man_Body.M_UE4Man_Body'");
+	BodyMaterial = UMaterialInstanceDynamic::Create(bodyMaterialAsset, this);
+	GetMesh()->SetMaterial(0, BodyMaterial);
+
+	UMaterialInstanceConstant* logoMaterialAsset;
+	CHelpers::GetAssetDynamic<UMaterialInstanceConstant>(&logoMaterialAsset, "MaterialInstanceConstant'/Game/Character/Materials/M_UE4Man_ChestLogo.M_UE4Man_ChestLogo'");
+	LogoMaterial = UMaterialInstanceDynamic::Create(logoMaterialAsset, this);
+	GetMesh()->SetMaterial(1, LogoMaterial);
+
 	Super::BeginPlay();
-	
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -103,5 +114,6 @@ void ACPlayer::OffRun()
 
 void ACPlayer::SetBodyColor(FLinearColor InColor)
 {
-
+	BodyMaterial->SetVectorParameterValue("BodyColor", InColor);
+	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
 }
