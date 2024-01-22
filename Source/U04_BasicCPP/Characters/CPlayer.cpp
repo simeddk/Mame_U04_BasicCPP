@@ -7,6 +7,7 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "CAnimInstance.h"
+#include "CRifle.h"
 
 ACPlayer::ACPlayer()
 {
@@ -53,6 +54,8 @@ void ACPlayer::BeginPlay()
 	LogoMaterial = UMaterialInstanceDynamic::Create(logoMaterialAsset, this);
 	GetMesh()->SetMaterial(1, LogoMaterial);
 
+	Rifle = ACRifle::Spawn(GetWorld(), this);
+
 	Super::BeginPlay();
 }
 
@@ -68,12 +71,13 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACPlayer::OnMoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACPlayer::OnMoveRight);
-
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACPlayer::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACPlayer::OnVerticalLook);
 
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Pressed, this, &ACPlayer::OnRun);
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &ACPlayer::OffRun);
+
+	PlayerInputComponent->BindAction("Rifle", EInputEvent::IE_Pressed, this, &ACPlayer::OnRifle);
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -110,6 +114,17 @@ void ACPlayer::OnRun()
 void ACPlayer::OffRun()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+}
+
+void ACPlayer::OnRifle()
+{
+	if (Rifle->IsEquipped())
+	{
+		Rifle->Unequip();
+		return;
+	}
+
+	Rifle->Equip();
 }
 
 void ACPlayer::SetBodyColor(FLinearColor InColor)

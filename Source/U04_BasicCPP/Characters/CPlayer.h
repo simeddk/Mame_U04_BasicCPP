@@ -32,6 +32,8 @@ private:
 	void OnRun();
 	void OffRun();
 
+	void OnRifle();
+
 public:
 	UFUNCTION(BlueprintCallable)
 		void SetBodyColor(FLinearColor InColor);
@@ -46,4 +48,6 @@ private:
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
+
+	class ACRifle* Rifle;
 };
