@@ -2,10 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "IRifle.h"
 #include "CPlayer.generated.h"
 
 UCLASS()
-class U04_BASICCPP_API ACPlayer : public ACharacter
+class U04_BASICCPP_API ACPlayer : public ACharacter, public IIRifle
 {
 	GENERATED_BODY()
 
@@ -18,6 +19,9 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+public:
+	FORCEINLINE ACRifle* GetRifle() override { return Rifle; }
 
 	//Axis Event
 private:
@@ -34,6 +38,16 @@ private:
 
 	void OnRifle();
 
+	void OnAim();
+	void OffAim();
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+		void ZoomIn();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void ZoomOut();
+
 public:
 	UFUNCTION(BlueprintCallable)
 		void SetBodyColor(FLinearColor InColor);
@@ -42,7 +56,8 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
 
-	UPROPERTY(VisibleDefaultsOnly)
+protected:
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
 private:
@@ -50,4 +65,6 @@ private:
 	class UMaterialInstanceDynamic* LogoMaterial;
 
 	class ACRifle* Rifle;
+
+	
 };

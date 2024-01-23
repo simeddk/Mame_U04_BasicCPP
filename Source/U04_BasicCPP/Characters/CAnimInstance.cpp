@@ -1,6 +1,8 @@
 #include "CAnimInstance.h"
 #include "Global.h"
 #include "Characters/CPlayer.h"
+#include "Characters/IRifle.h"
+#include "Characters/CRifle.h"
 
 void UCAnimInstance::NativeBeginPlay()
 {
@@ -15,4 +17,14 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	CheckNull(Player);
 	Speed = Player->GetVelocity().Size2D();
+
+	FRotator controlRotation = FRotator(0, Player->GetControlRotation().Yaw, 0);
+	Direction = CalculateDirection(Player->GetVelocity(), controlRotation);
+
+	IIRifle* rifleCharacter = Cast<IIRifle>(Player);
+	if (!!rifleCharacter)
+	{
+		bEquipped = rifleCharacter->GetRifle()->IsEquipped();
+		bAiming = rifleCharacter->GetRifle()->IsAiming();
+	}
 }

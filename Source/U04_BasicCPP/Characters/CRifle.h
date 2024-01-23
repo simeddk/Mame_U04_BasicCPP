@@ -23,10 +23,21 @@ public:
 
 	FORCEINLINE bool IsEquipping() { return bEquipping; }
 	FORCEINLINE bool IsEquipped() { return bEquipped; }
+	FORCEINLINE bool IsAiming() { return bAiming; }
 
 public:
 	void Equip();
+	void Begin_Equip();
+	void End_Equip();
+
 	void Unequip();
+	void Begin_Unequip();
+	void End_Unequip();
+
+	void Begin_Aim();
+	void End_Aim();
+
+
 
 
 private:
@@ -51,4 +62,5 @@ private:
 
 	bool bEquipping; //Is Playing Montages
 	bool bEquipped;  //Used In AnimInstance
+	bool bAiming;	 //Is R-Button Pressed
 };

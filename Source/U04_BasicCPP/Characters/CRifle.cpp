@@ -48,14 +48,51 @@ void ACRifle::Equip()
 	CheckTrue(bEquipping);
 	CheckTrue(bEquipped);
 
-	PrintLine();
-
 	bEquipping = true;
 	OwnerCharacter->PlayAnimMontage(GrabMontage);
 }
 
+void ACRifle::Begin_Equip()
+{
+	bEquipped = true;
+
+	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), HandSocket);
+}
+
+void ACRifle::End_Equip()
+{
+	bEquipping = false;
+}
+
 void ACRifle::Unequip()
 {
+	CheckFalse(bEquipped);
+	CheckTrue(bEquipping);
+
+	bEquipping = true;
+	OwnerCharacter->PlayAnimMontage(UngrabMontage);
+}
+
+void ACRifle::Begin_Unequip()
+{
+	bEquipped = false;
+
+	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), HolsterSocket);
+}
+
+void ACRifle::End_Unequip()
+{
+	bEquipping = false;
+}
+
+void ACRifle::Begin_Aim()
+{
+	bAiming = true;
+}
+
+void ACRifle::End_Aim()
+{
+	bAiming = false;
 }
 
 

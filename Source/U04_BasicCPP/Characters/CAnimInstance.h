@@ -17,10 +17,16 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character")
 		float Speed;
 
-	//Todo. [[Player->GetRifle()]]->IsEquipped();
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character")
+		float Direction;
+
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Rifle")
 		bool bEquipped;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Rifle")
+		bool bAiming;
+
 private:
 	class ACPlayer* Player;
+
 };

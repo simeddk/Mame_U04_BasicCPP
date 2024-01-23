@@ -31,6 +31,7 @@ ACPlayer::ACPlayer()
 	SpringArm->TargetArmLength = 200.f;
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bUsePawnControlRotation = true;
+	SpringArm->SocketOffset = FVector(0, 60, 0);
 
 	//CameraComp
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
@@ -56,6 +57,8 @@ void ACPlayer::BeginPlay()
 
 	Rifle = ACRifle::Spawn(GetWorld(), this);
 
+	OnRifle();
+
 	Super::BeginPlay();
 }
 
@@ -78,6 +81,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &ACPlayer::OffRun);
 
 	PlayerInputComponent->BindAction("Rifle", EInputEvent::IE_Pressed, this, &ACPlayer::OnRifle);
+
+	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
+	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -127,8 +133,41 @@ void ACPlayer::OnRifle()
 	Rifle->Equip();
 }
 
+void ACPlayer::OnAim()
+{
+	CheckFalse(Rifle->IsEquipped());
+	CheckTrue(Rifle->IsEquipping());
+
+	bUseControllerRotationYaw = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	SpringArm->TargetArmLength = 100.f;
+	SpringArm->SocketOffset = FVector(0, 30, 10);
+
+	ZoomIn();
+
+	Rifle->Begin_Aim();
+}
+
+void ACPlayer::OffAim()
+{
+	CheckFalse(Rifle->IsEquipped());
+	CheckTrue(Rifle->IsEquipping());
+
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	SpringArm->TargetArmLength = 200.f;
+	SpringArm->SocketOffset = FVector(0, 60, 0);
+
+	ZoomOut();
+
+	Rifle->End_Aim();
+}
+
 void ACPlayer::SetBodyColor(FLinearColor InColor)
 {
 	BodyMaterial->SetVectorParameterValue("BodyColor", InColor);
 	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
 }
+
