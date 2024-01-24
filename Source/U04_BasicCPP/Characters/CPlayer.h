@@ -22,6 +22,7 @@ public:
 
 public:
 	FORCEINLINE ACRifle* GetRifle() override { return Rifle; }
+	void GetAimInfo(FVector& OutAimStart, FVector& OutAimEnd, FVector& OutAimDirection);
 
 	//Axis Event
 private:
@@ -61,10 +62,14 @@ protected:
 		class UCameraComponent* Camera;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+		TSubclassOf<class UCAimWidget> AimWidgetClass;
+
+private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
 
 	class ACRifle* Rifle;
-
+	class UCAimWidget* AimWidget;
 	
 };

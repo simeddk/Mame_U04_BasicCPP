@@ -8,6 +8,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "CAnimInstance.h"
 #include "CRifle.h"
+#include "Widgets/CAimWidget.h"
 
 ACPlayer::ACPlayer()
 {
@@ -41,10 +42,14 @@ ACPlayer::ACPlayer()
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
+
+	//Get Widget ClassRef
+	CHelpers::GetClass<UCAimWidget>(&AimWidgetClass, "WidgetBlueprint'/Game/Widgets/WB_Aim.WB_Aim_C'");
 }
 
 void ACPlayer::BeginPlay()
 {
+	//Set Dynamic Material
 	UMaterial* bodyMaterialAsset;
 	CHelpers::GetAssetDynamic<UMaterial>(&bodyMaterialAsset, "Material'/Game/Character/Materials/M_UE4Man_Body.M_UE4Man_Body'");
 	BodyMaterial = UMaterialInstanceDynamic::Create(bodyMaterialAsset, this);
@@ -55,9 +60,17 @@ void ACPlayer::BeginPlay()
 	LogoMaterial = UMaterialInstanceDynamic::Create(logoMaterialAsset, this);
 	GetMesh()->SetMaterial(1, LogoMaterial);
 
+	//Spawn & Equip Rifle
 	Rifle = ACRifle::Spawn(GetWorld(), this);
-
 	OnRifle();
+
+	//Create Widgets
+	if (!!AimWidgetClass)
+	{
+		AimWidget = CreateWidget<UCAimWidget, APlayerController>(GetController<APlayerController>(), AimWidgetClass);
+		AimWidget->AddToViewport();
+		AimWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
 
 	Super::BeginPlay();
 }
@@ -84,6 +97,17 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
+}
+
+void ACPlayer::GetAimInfo(FVector& OutAimStart, FVector& OutAimEnd, FVector& OutAimDirection)
+{
+	OutAimDirection = Camera->GetForwardVector();
+
+	FVector cameraLocation = Camera->GetComponentToWorld().GetLocation();
+	OutAimStart = cameraLocation + OutAimDirection  * 100.f;
+	
+	FVector randomDirection = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(OutAimDirection, 0.2f);
+	OutAimEnd = cameraLocation + randomDirection * 3000.f;
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -147,6 +171,8 @@ void ACPlayer::OnAim()
 	ZoomIn();
 
 	Rifle->Begin_Aim();
+
+	AimWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void ACPlayer::OffAim()
@@ -163,6 +189,8 @@ void ACPlayer::OffAim()
 	ZoomOut();
 
 	Rifle->End_Aim();
+
+	AimWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ACPlayer::SetBodyColor(FLinearColor InColor)

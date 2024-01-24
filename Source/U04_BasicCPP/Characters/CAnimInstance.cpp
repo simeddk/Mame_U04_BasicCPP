@@ -21,6 +21,8 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	FRotator controlRotation = FRotator(0, Player->GetControlRotation().Yaw, 0);
 	Direction = CalculateDirection(Player->GetVelocity(), controlRotation);
 
+	Pitch = Player->GetBaseAimRotation().Pitch;
+
 	IIRifle* rifleCharacter = Cast<IIRifle>(Player);
 	if (!!rifleCharacter)
 	{

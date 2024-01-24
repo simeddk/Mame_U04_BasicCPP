@@ -17,4 +17,5 @@ class U04_BASICCPP_API IIRifle
 
 public:
 	virtual class ACRifle* GetRifle() = 0;
+	virtual void GetAimInfo(FVector& OutAimStart, FVector& OutAimEnd, FVector& OutAimDirection) = 0;
 };

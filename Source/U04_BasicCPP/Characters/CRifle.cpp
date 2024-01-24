@@ -2,6 +2,8 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Engine/StaticMeshActor.h"
+#include "Characters/IRifle.h"
 
 ACRifle::ACRifle()
 {
@@ -40,6 +42,42 @@ void ACRifle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CheckFalse(bAiming);
+
+	//LineTrace for Aim(HitScan)
+	IIRifle* rifleCharacter = Cast<IIRifle>(OwnerCharacter);
+	CheckNull(rifleCharacter);
+
+	FVector start, end, direction;
+	rifleCharacter->GetAimInfo(start, end, direction);
+
+	//DrawDebugLine(GetWorld(), start, end, FColor::Red);
+
+	FCollisionQueryParams queryParam;
+	queryParam.AddIgnoredActor(this);
+	queryParam.AddIgnoredActor(OwnerCharacter);
+
+	FHitResult hitResult;
+	if (GetWorld()->LineTraceSingleByChannel(hitResult, start, end, ECollisionChannel::ECC_PhysicsBody, queryParam))
+	{
+		AStaticMeshActor* otherActor = Cast<AStaticMeshActor>(hitResult.GetActor());
+		if (!!otherActor)
+		{
+			UStaticMeshComponent* otherComp = Cast<UStaticMeshComponent>(otherActor->GetRootComponent());
+			if (!!otherComp)
+			{
+				if (otherComp->BodyInstance.bSimulatePhysics == true)
+				{
+					//Todo.
+					//AimWidget->OnTarget() : RED
+					return;
+				}
+			}
+		}
+	}
+
+	//else
+	//AimWidget->OffTarget() : WHITE
 }
 
 

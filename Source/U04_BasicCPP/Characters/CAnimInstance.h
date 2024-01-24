@@ -20,6 +20,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character")
 		float Direction;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Character")
+		float Pitch;
+
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Rifle")
 		bool bEquipped;
 
@@ -28,5 +31,6 @@ protected:
 
 private:
 	class ACPlayer* Player;
+
 
 };
